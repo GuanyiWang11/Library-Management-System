@@ -1,4 +1,4 @@
-# GUI-Based Library Management System
+# GUI-Based Library Management System (In Progress)
 
 A Python-based application built using Tkinter that allows users to manage a library of books through a graphical interface. Designed as part of an Advanced Higher Computing course, this project demonstrates core programming concepts including GUI development, algorithms, object-oriented design, and file handling.
 
