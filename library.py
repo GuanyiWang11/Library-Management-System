@@ -8,8 +8,8 @@ class Library:
         self.searched = False
         
     # Runs the main window of library
-    def open_(library):
-        library.main_window.mainloop()
+    def open_(self):
+        self.main_window.mainloop()
 
 class Book:
     
