@@ -6,7 +6,7 @@ A Python-based application built using Tkinter that allows users to manage a lib
 
 - View all books in a sortable table (Treeview)
 - Search for a book by title using binary search
-- Sort books by title or author using bubble sort
+- Sort books by ID, title, author, or gente using bubble sort
 - Borrow and return books with real-time status updates
 - Load and save book data from and to a CSV file
 - Input validation and user feedback via Tkinter message boxes
