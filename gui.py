@@ -1,9 +1,10 @@
 import csv
 import tkinter as tk
 from tkinter import *
-from tkinter import messagebox, tt
+from tkinter import messagebox, ttk
+from library import Library, Book
 
-class LibraryApp:
+class LibrarySystem:
     def __init__(self, csv_file="book.csv"):
         self.books = self.csv_to_array(csv_file)
         self.library = Library(self.books)
@@ -29,13 +30,13 @@ class LibraryApp:
         self.input_frame.pack()
 
     def run(self):
-        self.library.open()
+        self.library.open_()
 
     def create_window(self):
     
         window = Tk()
         window.geometry("1000x500")
-        window.title(library.name)
+        window.title(self.library.name)
     
         return window
     
@@ -47,21 +48,19 @@ class LibraryApp:
         for x, y in self.button_info.items():
             button = Button(self.button_frame, text=x, command=y)
             button.pack(side=LEFT)
-        
-        return window  
     
     def sort(self):
         """
         Displays input box to get value to be sorted by
         """
-        self.clear(input_frame)
+        self.clear(self.input_frame)
     
         self.library.searched = False
         sort_var = StringVar()
     
         label = Label(self.input_frame, text="Sort by:")
         entry = Entry(self.input_frame, textvariable=sort_var)
-        submit_button = Button(self.input_frame, text="Submit", command=lambda: sort_submit(sort_var))
+        submit_button = Button(self.input_frame, text="Submit", command=lambda: self.sort_submit(sort_var))
             
         label.pack()
         entry.pack()
@@ -75,7 +74,7 @@ class LibraryApp:
         
         if self.validate_sort_val(sort_val):
             
-            n = len(books)
+            n = len(self.books)
     
             for i in range(n):
     
@@ -83,7 +82,7 @@ class LibraryApp:
     
                     if self.books[j].get(sort_val) > self.books[j+1].get(sort_val):
                         self.books[j], self.books[j+1] = self.books[j+1], self.books[j]
-            load()
+            self.load()
         
         else:
             messagebox.showerror("Error", "Input must either id, title, author, or genre")
@@ -105,7 +104,7 @@ class LibraryApp:
         Displays input box to get a value to search for
         """
     
-        self.clear(input_frame)
+        self.clear(self.input_frame)
     
         search_var = StringVar()
         
@@ -113,7 +112,7 @@ class LibraryApp:
             
             label = Label(self.input_frame, text="Search:")
             entry = Entry(self.input_frame, textvariable=search_var) # This gives the actual input box
-            submit_button= Button(self.input_frame, text="Submit", command=lambda: search_submit(search_var))
+            submit_button= Button(self.input_frame, text="Submit", command=lambda: self.search_submit(search_var))
             
             label.pack()
             entry.pack()
@@ -160,13 +159,13 @@ class LibraryApp:
         Displays input box to get book to be borrowed
         """
     
-        self.clear(input_frame)
+        self.clear(self.input_frame)
     
         borrow_var = StringVar()
     
         label = Label(self.input_frame, text="Borrow: ")
         entry = Entry(self.input_frame, textvariable=borrow_var)
-        submit_button= Button(self.input_frame, text="Submit", command=lambda: borrow_submit(borrow_var))
+        submit_button= Button(self.input_frame, text="Submit", command=lambda: self.borrow_submit(borrow_var))
             
         label.pack()
         entry.pack()
@@ -181,7 +180,7 @@ class LibraryApp:
         counter = 0
         
         # Loops through every item unless book is found
-        while found == False and counter < len(books):
+        while found == False and counter < len(self.books):
             
             if self.books[counter].title == borrow_val:
     
@@ -206,13 +205,13 @@ class LibraryApp:
         Displays input box to get book to be returned
         """
     
-        self.clear(input_frame)
+        self.clear(self.input_frame)
     
         return_var = StringVar()
     
         label = Label(self.input_frame, text="Return: ")
         entry = Entry(self.input_frame, textvariable=return_var)
-        submit_button= Button(self.input_frame, text="Submit", command=lambda: return_submit(return_var))
+        submit_button= Button(self.input_frame, text="Submit", command=lambda: self.return_submit(return_var))
             
         label.pack()
         entry.pack()
@@ -227,13 +226,13 @@ class LibraryApp:
         counter = 0
         
         # Loops through every item unless book is found
-        while found == False and counter < len(books):
+        while found == False and counter < len(self.books):
             
             if self.books[counter].title == return_val:
                 
-                if selfbooks[counter].available == "No":
+                if self.books[counter].available == "No":
                     messagebox.showinfo("Library Updated", f"{return_val} is returned")
-                    books[counter].available = "Yes"
+                    self.books[counter].available = "Yes"
                     
                 elif self.books[counter].available == "Yes":
                     messagebox.showerror("Error", f"{return_val} is still available and therefore cannot be \"returned\"")
@@ -252,7 +251,7 @@ class LibraryApp:
         Displays list of books in table format
         """
     
-        self.clear(main_frame)
+        self.clear(self.main_frame)
     
         label = Label(self.main_frame, text="Books:")
         treeview = ttk.Treeview(
@@ -285,17 +284,17 @@ class LibraryApp:
         label.pack()
         treeview.pack()
     
-    def clear(frame):
+    def clear(self, frame):
         # Deletes every widget in the frame
         for widget in frame.winfo_children():
             widget.destroy()
             
-    def save():
+    def save(self):
     
         file_edit = open("book.csv", "w", newline= "")
         writer = csv.writer(file_edit)
     
-        for row in books:
+        for row in self.books:
             writer.writerow([row.ID, row.title, row.author, row.genre, row.available])
                                 
         file_edit.close()
@@ -314,4 +313,3 @@ class LibraryApp:
         file.close()
     
         return array
-    
